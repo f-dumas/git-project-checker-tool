@@ -1,6 +1,6 @@
 {
     "name": "faby/git-project-checker-tool",
-    "description": "Helper scripts to check your git projects.",
+    "description": "Tool to check all your git projects in order to get all your uncommited changes easily. ",
     "require": {
         "php": ">7.4",
         "ext-json": "*",
