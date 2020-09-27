@@ -1,0 +1,43 @@
+{
+    "name": "faby/git-project-checker-tool",
+    "description": "Helper scripts to check your git projects.",
+    "require": {
+        "php": ">7.4",
+        "ext-json": "*",
+        "ext-zlib": "*",
+        "symfony/console": "^5.1",
+        "symfony/dotenv": "^5.1",
+        "symfony/finder": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Faby\\GitChecker\\": "src/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "LF\\EnvDiff\\Composer\\ScriptHandler::actualizeEnv"
+        ],
+        "post-update-cmd": [
+            "LF\\EnvDiff\\Composer\\ScriptHandler::actualizeEnv"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "symfony/var-dumper": "^5.1"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
+        "bin-dir": "bin/"
+    },
+    "bin": [
+        "color-message"
+    ]
+}
