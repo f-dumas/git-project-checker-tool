@@ -54,12 +54,12 @@ class GitShell
         return !empty($result);
     }
 
-    public static function executeGitCleanIgnoredFiles(): string
+    public static function executeGitCleanIgnoredFiles(): ?string
     {
         return shell_exec("git clean -Xf");
     }
 
-    public static function executeGitCleanUntrackedFiles()
+    public static function executeGitCleanUntrackedFiles(): ?string
     {
         return shell_exec("git clean -df");
     }

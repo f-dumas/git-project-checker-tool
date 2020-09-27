@@ -14,7 +14,7 @@ class MessageOutput
         $this->output = $output;
     }
 
-    public function display(string $message, array $options = []): void
+    public function display(?string $message, array $options = []): void
     {
         $this->output->writeln($message);
     }
