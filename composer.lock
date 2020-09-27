@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "faby/console-color-message-tool",
-            "version": "v1.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/f-dumas/console-color-message-tool.git",
-                "reference": "a1253621c821e688ffce40c2a0a2355639b7d6ce"
+                "reference": "0d50c03308effa45d4515a60f8000bdbf8cc4bbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/f-dumas/console-color-message-tool/zipball/a1253621c821e688ffce40c2a0a2355639b7d6ce",
-                "reference": "a1253621c821e688ffce40c2a0a2355639b7d6ce",
+                "url": "https://api.github.com/repos/f-dumas/console-color-message-tool/zipball/0d50c03308effa45d4515a60f8000bdbf8cc4bbb",
+                "reference": "0d50c03308effa45d4515a60f8000bdbf8cc4bbb",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +42,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Helper script to color your console outputs.",
-            "time": "2020-09-25T13:03:36+00:00"
+            "time": "2020-09-27T09:51:50+00:00"
         },
         {
             "name": "psr/container",
