@@ -14,9 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
 
-class GitLocalCheckCommand extends Command
+class GitCheckerCommand extends Command
 {
-    public const DEFAULT_ACTION = "status";
     public const REASON_NOT_ON_MASTER = 1;
     public const REASON_FILES_MODIFIED = 2;
     public const REASON_FILES_ADDED = 3;
@@ -27,11 +26,11 @@ class GitLocalCheckCommand extends Command
 
     private string $path;
 
-    private string $action;
-
     private array $projectWithLocalChanges;
     private float $commandStartTimestamp;
     private MessageOutput $outputDisplayer;
+    private bool $ignoreMasterCheck = false;
+    private bool $cleanUntrackedFiles = false;
 
     public function __construct()
     {
@@ -46,8 +45,8 @@ class GitLocalCheckCommand extends Command
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command help you to check your git projects')
-            ->addArgument('path', InputArgument::REQUIRED, 'Path where your git projects are.')
-            ->addOption('action', null, InputOption::VALUE_OPTIONAL, 'Check type: status report, local, untracked-files.', static::DEFAULT_ACTION);
+            ->addArgument('root-path', InputArgument::REQUIRED, 'Root path where your git projects are.')
+            ->addOption('ignore-master-check', null, InputOption::VALUE_OPTIONAL, 'Ignore the check of projects on non-master branch.');
 
         parent::configure();
 
@@ -56,39 +55,30 @@ class GitLocalCheckCommand extends Command
 
     private function initOptionsAndArguments(InputInterface $input): void
     {
-        $this->path = (string)$input->getArgument("path");
-        $this->action = (string)$input->getOption("action");
+        $this->path = (string)$input->getArgument("root-path");
+        if ($input->getOption("ignore-master-check")) {
+            $this->ignoreMasterCheck = true;
+        }
+    }
+
+    private function initOutput(OutputInterface $output): void
+    {
+        $this->outputDisplayer = new MessageOutput($output);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initOptionsAndArguments($input);
         $this->initOutput($output);
-        // Demo mode: preset
-//        if ($this->showPresets) {
-//            $this->displayAvailablePresets($output);
-//
-//            return Command::SUCCESS;
-//        }
-//        // Demo mode: colors
-//        if ($this->showColors) {
-//            $this->displayAvailableColors($output);
-//
-//            return Command::SUCCESS;
-//        }
-//        // Display message
-//        $this->displayMessage($output);
-
+        // Default: status report
         $this->executeStatusReport();
-
-
+        // Output display
         $this->outputDisplayer->display(
             sprintf("Command ended in %ss", time() - $this->commandStartTimestamp)
         );
 
         return Command::SUCCESS;
     }
-
 
     private function executeStatusReport(): void
     {
@@ -99,19 +89,17 @@ class GitLocalCheckCommand extends Command
             $this->checkRemovedFiles($folder);
             $this->checkProjectOnCustomBranches($folder);
         }
-
         $this->displayReport();
     }
 
-
     private function addProjectToNonConformList(string $folder, int $reason): void
     {
-        $this->projectWithLocalChanges[$folder][] = $reason;
+        $this->projectWithLocalChanges[$reason][] = $folder;
     }
 
     private function checkProjectOnCustomBranches(string $folder): void
     {
-        if (!GitShell::isMasterBranch($folder)) {
+        if (!$this->ignoreMasterCheck && !GitShell::isMasterBranch($folder)) {
             $this->addProjectToNonConformList($folder, self::REASON_NOT_ON_MASTER);
         }
     }
@@ -146,32 +134,31 @@ class GitLocalCheckCommand extends Command
 
     private function displayReport(): void
     {
-        foreach ($this->projectWithLocalChanges as $project => $reasons) {
-            $this->outputDisplayer->display(sprintf("Non-conform project: %s", $project));
-            foreach ($reasons as $reason) {
-                switch($reason) {
-                    case static::REASON_NOT_ON_MASTER:
-                        $this->outputDisplayer->display("---- Branch not on Master");
-                        break;
-                    case static::REASON_FILES_ADDED:
-                        $this->outputDisplayer->display("---- Uncommited added files");
-                        break;
-                    case static::REASON_FILES_DELETED:
-                        $this->outputDisplayer->display("---- Uncommited deleted files");
-                        break;
-                    case static::REASON_FILES_MODIFIED:
-                        $this->outputDisplayer->display("---- Uncommited modified files");
-                        break;
-                    case static::REASON_FILES_UNTRACKED:
-                        $this->outputDisplayer->display("---- Uncommited untracked files");
-                        break;
-                }
+        foreach ($this->projectWithLocalChanges as $reason => $projects) {
+            $this->outputDisplayer->display(
+                sprintf("Non-conform project: %s", static::getReasonMessage($reason))
+            );
+            foreach ($projects as $project) {
+                $this->outputDisplayer->display(
+                    sprintf("--- %s", $project)
+                );
             }
         }
     }
 
-    private function initOutput(OutputInterface $output)
+    private static function getReasonMessage(int $reason): string
     {
-        $this->outputDisplayer = new MessageOutput($output);
+        switch ($reason) {
+            case static::REASON_NOT_ON_MASTER:
+                return "Branch not on Master";
+            case static::REASON_FILES_ADDED:
+                return "Uncommited added files";
+            case static::REASON_FILES_DELETED:
+                return "Uncommited deleted files";
+            case static::REASON_FILES_MODIFIED:
+                return "Uncommited modified files";
+            case static::REASON_FILES_UNTRACKED:
+                return "Uncommited untracked files";
+        }
     }
 }
