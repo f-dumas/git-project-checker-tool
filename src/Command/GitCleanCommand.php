@@ -46,6 +46,18 @@ class GitCleanCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
+        $command = $this->getApplication()->find('faby:greet');
+
+        $arguments = [
+            'name'    => 'Fabien',
+            '--yell'  => true,
+        ];
+
+        $greetInput = new ArrayInput($arguments);
+        $returnCode = $command->run($greetInput, $output);
+
+
         $this->initOutput($output);
         $this->cleanUntrackedFiles();
         $this->cleanIgnoredFiles();
