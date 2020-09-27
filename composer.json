@@ -5,6 +5,7 @@
         "php": ">7.4",
         "ext-json": "*",
         "ext-zlib": "*",
+        "faby/console-color-message-tool": "^1.0",
         "symfony/console": "^5.1",
         "symfony/dotenv": "^5.1",
         "symfony/finder": "^5.1"
