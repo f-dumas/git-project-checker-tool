@@ -2,7 +2,6 @@
 
 namespace FDTool\GitChecker\Output;
 
-
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MessageOutput
@@ -19,10 +18,5 @@ class MessageOutput
         $this->output->writeln(
             sprintf("<%s>$message</>", $colorType)
         );
-    }
-
-    public function displayCustomColor(?string $message, string $color = null, string $backgroundColor = null): void
-    {
-        $this->output->writeln($message);
     }
 }
