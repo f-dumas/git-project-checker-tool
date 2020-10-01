@@ -1,6 +1,6 @@
 <?php
 
-namespace Faby\GitChecker\Git;
+namespace FDTool\GitChecker\Git;
 
 class GitShell
 {

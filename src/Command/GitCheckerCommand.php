@@ -1,18 +1,15 @@
 <?php
 
-namespace Faby\GitChecker\Command;
+namespace FDTool\GitChecker\Command;
 
-use Faby\GitChecker\FileParser\GitDirectoryParser;
-use Faby\GitChecker\Git\GitShell;
-use Faby\GitChecker\Output\MessageOutput;
+use FDTool\GitChecker\FileParser\GitDirectoryParser;
+use FDTool\GitChecker\Git\GitShell;
+use FDTool\GitChecker\Output\MessageOutput;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
-
 
 class GitCheckerCommand extends Command
 {
@@ -30,7 +27,6 @@ class GitCheckerCommand extends Command
     private float $commandStartTimestamp;
     private MessageOutput $outputDisplayer;
     private bool $ignoreMasterCheck = false;
-    private bool $cleanUntrackedFiles = false;
 
     public function __construct()
     {
@@ -46,7 +42,7 @@ class GitCheckerCommand extends Command
             // the "--help" option
             ->setHelp('This command help you to check your git projects')
             ->addArgument('root-path', InputArgument::REQUIRED, 'Root path where your git projects are.')
-            ->addOption('ignore-master-check', null, InputOption::VALUE_OPTIONAL, 'Ignore the check of projects on non-master branch.');
+            ->addOption('ignore-master-check', null, InputOption::VALUE_NONE, 'Ignore the check of projects on non-master branch.');
 
         parent::configure();
 
@@ -74,7 +70,8 @@ class GitCheckerCommand extends Command
         $this->executeStatusReport();
         // Output display
         $this->outputDisplayer->display(
-            sprintf("Command ended in %ss", time() - $this->commandStartTimestamp)
+            sprintf("Command ended in %ss", time() - $this->commandStartTimestamp),
+            "comment"
         );
 
         return Command::SUCCESS;
@@ -136,11 +133,13 @@ class GitCheckerCommand extends Command
     {
         foreach ($this->projectWithLocalChanges as $reason => $projects) {
             $this->outputDisplayer->display(
-                sprintf("Non-conform project: %s", static::getReasonMessage($reason))
+                sprintf("Non-conform project: %s", static::getReasonMessage($reason)),
+                "question"
             );
             foreach ($projects as $project) {
                 $this->outputDisplayer->display(
-                    sprintf("--- %s", $project)
+                    sprintf("--- %s", $project),
+                    "error"
                 );
             }
         }

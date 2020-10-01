@@ -1,7 +1,6 @@
 <?php
 
-namespace Faby\GitChecker\Output;
-
+namespace FDTool\GitChecker\Output;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -14,8 +13,10 @@ class MessageOutput
         $this->output = $output;
     }
 
-    public function display(?string $message, array $options = []): void
+    public function display(?string $message, string $colorType = "info"): void
     {
-        $this->output->writeln($message);
+        $this->output->writeln(
+            sprintf("<%s>$message</>", $colorType)
+        );
     }
 }
