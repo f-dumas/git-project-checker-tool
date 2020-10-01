@@ -2,16 +2,11 @@
 
 namespace FDTool\GitChecker\Command;
 
-use FDTool\GitChecker\FileParser\GitDirectoryParser;
 use FDTool\GitChecker\Git\GitShell;
 use FDTool\GitChecker\Output\MessageOutput;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\InvalidOptionException;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 
 
 class GitCleanCommand extends Command
@@ -46,18 +41,6 @@ class GitCleanCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
-        $command = $this->getApplication()->find('faby:greet');
-
-        $arguments = [
-            'name'    => 'Fabien',
-            '--yell'  => true,
-        ];
-
-        $greetInput = new ArrayInput($arguments);
-        $returnCode = $command->run($greetInput, $output);
-
-
         $this->initOutput($output);
         $this->cleanUntrackedFiles();
         $this->cleanIgnoredFiles();
@@ -72,15 +55,15 @@ class GitCleanCommand extends Command
 
     private function cleanUntrackedFiles(): void
     {
-        $this->outputDisplayer->display('Clean untracked files');
+        $this->outputDisplayer->display('Clean untracked files', "question");
         $this->outputDisplayer->display(
             GitShell::executeGitCleanUntrackedFiles()
         );
     }
 
-    private function cleanIgnoredFiles()
+    private function cleanIgnoredFiles(): void
     {
-        $this->outputDisplayer->display('Clean ignored files');
+        $this->outputDisplayer->display('Clean ignored files', "question");
         $this->outputDisplayer->display(
             GitShell::executeGitCleanIgnoredFiles()
         );
