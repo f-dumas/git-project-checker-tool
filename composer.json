@@ -1,18 +1,17 @@
 {
-    "name": "faby/git-project-checker-tool",
+    "name": "f-dumas/git-project-checker-tool",
     "description": "Tool to check all your git projects in order to get all your uncommited changes easily. ",
     "require": {
         "php": ">7.4",
         "ext-json": "*",
         "ext-zlib": "*",
-        "faby/console-color-message-tool": "^1.0",
         "symfony/console": "^5.1",
         "symfony/dotenv": "^5.1",
         "symfony/finder": "^5.1"
     },
     "autoload": {
         "psr-4": {
-            "Faby\\GitChecker\\": "src/"
+            "FDTool\\GitChecker\\": "src/"
         }
     },
     "scripts": {
@@ -37,8 +36,5 @@
         },
         "sort-packages": true,
         "bin-dir": "bin/"
-    },
-    "bin": [
-        "color-message"
-    ]
+    }
 }

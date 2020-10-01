@@ -7,8 +7,7 @@ use Symfony\Component\Console\Application;
 
 $application = new Application();
 
-$command = new \Faby\GitChecker\Command\GitCleanCommand();
-$application->add($command);
+$application->add($command = new \FDTool\GitChecker\Command\GitCleanCommand());
 $application->setDefaultCommand($command->getName(), true);
 
 $application->run();

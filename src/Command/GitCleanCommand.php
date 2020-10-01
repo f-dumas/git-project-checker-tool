@@ -1,10 +1,10 @@
 <?php
 
-namespace Faby\GitChecker\Command;
+namespace FDTool\GitChecker\Command;
 
-use Faby\GitChecker\FileParser\GitDirectoryParser;
-use Faby\GitChecker\Git\GitShell;
-use Faby\GitChecker\Output\MessageOutput;
+use FDTool\GitChecker\FileParser\GitDirectoryParser;
+use FDTool\GitChecker\Git\GitShell;
+use FDTool\GitChecker\Output\MessageOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Input\InputArgument;
@@ -63,7 +63,8 @@ class GitCleanCommand extends Command
         $this->cleanIgnoredFiles();
 
         $this->outputDisplayer->display(
-            sprintf("Command ended in %ss", time() - $this->commandStartTimestamp)
+            sprintf("Command ended in %ss", time() - $this->commandStartTimestamp),
+            "comment"
         );
 
         return Command::SUCCESS;

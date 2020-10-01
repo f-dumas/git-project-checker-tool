@@ -1,6 +1,6 @@
 <?php
 
-namespace Faby\GitChecker\FileParser;
+namespace FDTool\GitChecker\FileParser;
 
 use Symfony\Component\Finder\Finder;
 
