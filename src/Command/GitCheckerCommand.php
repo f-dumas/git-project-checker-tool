@@ -23,7 +23,7 @@ class GitCheckerCommand extends Command
 
     private string $path;
 
-    private array $projectWithLocalChanges;
+    private array $projectWithLocalChanges = [];
     private float $commandStartTimestamp;
     private MessageOutput $outputDisplayer;
     private bool $ignoreMasterCheck = false;
