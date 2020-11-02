@@ -28,6 +28,15 @@ class GitCleanCommand extends Command
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('This command help you to clean your git projects');
+        // Add an option to clean also the merged branches
+        /*
+         * git-clean-br() {
+              for br in $(git branch --merged | egrep -v '(^\*|master)'); do
+                git branch -d ${br};
+              done
+              git fetch --prune
+            }
+         */
 
         parent::configure();
 
